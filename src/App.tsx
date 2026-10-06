@@ -5,6 +5,7 @@ import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
 import { WhatsAppButton } from './components/WhatsAppButton';
 import { OdooManagerModal } from './components/OdooManagerModal';
+import { GitHubPagesModal } from './components/GitHubPagesModal';
 import { ToastContainer } from './components/ToastContainer';
 
 // Pages
@@ -23,10 +24,11 @@ import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
 import { TermsPage } from './pages/TermsPage';
 import { ShippingPolicyPage } from './pages/ShippingPolicyPage';
 import { ReturnPolicyPage } from './pages/ReturnPolicyPage';
-import { Settings, ExternalLink } from 'lucide-react';
+import { Settings, ExternalLink, Github } from 'lucide-react';
 
 const StoreContent: React.FC = () => {
   const { currentPage, setIsOdooManagerOpen, orders } = useStore();
+  const [isGitHubModalOpen, setIsGitHubModalOpen] = React.useState(false);
 
   const renderCurrentPage = () => {
     switch (currentPage) {
@@ -76,9 +78,17 @@ const StoreContent: React.FC = () => {
           </span>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[10px] text-neutral-400 hidden sm:inline">
+          <span className="text-[10px] text-neutral-400 hidden md:inline">
             Active Orders: <strong className="text-white font-mono">{orders.length}</strong>
           </span>
+          <button
+            onClick={() => setIsGitHubModalOpen(true)}
+            className="flex items-center gap-1.5 bg-[#24292F] hover:bg-[#32383f] text-white px-2 py-0.5 rounded text-[10px] font-semibold transition-colors border border-neutral-700 shadow-xs"
+            title="Deploy to GitHub Pages"
+          >
+            <Github className="w-3 h-3 text-white" />
+            <span>Deploy to GitHub Pages</span>
+          </button>
           <button
             onClick={() => setIsOdooManagerOpen(true)}
             className="flex items-center gap-1.5 bg-[#714B67] hover:bg-[#85587a] text-white px-2 py-0.5 rounded text-[10px] font-semibold transition-colors shadow-xs"
@@ -108,6 +118,12 @@ const StoreContent: React.FC = () => {
 
       {/* Odoo Live Management Modal */}
       <OdooManagerModal />
+
+      {/* GitHub Pages Integration Modal */}
+      <GitHubPagesModal
+        isOpen={isGitHubModalOpen}
+        onClose={() => setIsGitHubModalOpen(false)}
+      />
 
       {/* Toast Notifications */}
       <ToastContainer />
