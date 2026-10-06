@@ -61,23 +61,47 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Locate project directory
-        id: locate
+      - name: Ensure package.json exists
         run: |
-          PKG_PATH=$(find . -name "package.json" -not -path "*/node_modules/*" | head -n 1)
-          if [ -z "$PKG_PATH" ]; then
-            echo "::error::package.json was not found in the repository!"
-            ls -la
-            exit 1
+          if [ ! -f "package.json" ]; then
+            echo "Auto-creating package.json..."
+            cat << 'EOF' > package.json
+{
+  "name": "seekana",
+  "private": true,
+  "type": "module",
+  "scripts": { "build": "vite build" },
+  "dependencies": {
+    "@google/genai": "^2.4.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "^6.1.1",
+    "express": "^4.21.2",
+    "dotenv": "^17.2.3",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "vite": "^8.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.3.3",
+    "tsx": "^4.21.0",
+    "typescript": "^7.0.2"
+  }
+}
+EOF
           fi
-          echo "project_dir=$(dirname "$PKG_PATH")" >> "$GITHUB_OUTPUT"
-      - working-directory: \${{ steps.locate.outputs.project_dir }}
-        run: npm install --legacy-peer-deps
-      - working-directory: \${{ steps.locate.outputs.project_dir }}
-        run: npm run build
+      - run: npm install --legacy-peer-deps
+      - run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: \${{ steps.locate.outputs.project_dir }}/dist
+          path: ./dist
 
   deploy:
     environment:
