@@ -62,6 +62,7 @@ jobs:
         with:
           node-version: 22
       - run: test -f package.json || echo '{"name":"seekana","private":true,"type":"module","scripts":{"build":"vite build"},"dependencies":{"@google/genai":"^2.4.0","@tailwindcss/vite":"^4.3.3","@vitejs/plugin-react":"^6.1.1","express":"^4.21.2","dotenv":"^17.2.3","lucide-react":"^0.546.0","motion":"^12.23.24","react":"^19.0.1","react-dom":"^19.0.1","vite":"^8.3.0"},"devDependencies":{"@types/express":"^4.17.21","@types/node":"^22.14.0","@types/react":"^19.3.0","@types/react-dom":"^19.3.0","autoprefixer":"^10.4.21","esbuild":"^0.25.0","tailwindcss":"^4.3.3","tsx":"^4.21.0","typescript":"^7.0.2"}}' > package.json
+      - run: mkdir -p src && test -f src/main.tsx || echo "import {createRoot} from 'react-dom/client'; import App from './App.tsx'; import './index.css'; createRoot(document.getElementById('root')!).render(<App />);" > src/main.tsx
       - run: npm install --legacy-peer-deps
       - run: npm run build
       - uses: actions/upload-pages-artifact@v3
