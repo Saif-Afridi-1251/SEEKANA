@@ -2,5 +2,7 @@
   "name": "SEEKANA - Modern & Premium eCommerce Store",
   "description": "A complete, modern and minimal eCommerce website for SEEKANA built with Odoo Website & eCommerce functional architecture.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }
