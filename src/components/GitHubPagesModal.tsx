@@ -60,12 +60,24 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - run: npm install --legacy-peer-deps
-      - run: npm run build
+          node-version: 22
+      - name: Locate project directory
+        id: locate
+        run: |
+          PKG_PATH=$(find . -name "package.json" -not -path "*/node_modules/*" | head -n 1)
+          if [ -z "$PKG_PATH" ]; then
+            echo "::error::package.json was not found in the repository!"
+            ls -la
+            exit 1
+          fi
+          echo "project_dir=$(dirname "$PKG_PATH")" >> "$GITHUB_OUTPUT"
+      - working-directory: \${{ steps.locate.outputs.project_dir }}
+        run: npm install --legacy-peer-deps
+      - working-directory: \${{ steps.locate.outputs.project_dir }}
+        run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist
+          path: \${{ steps.locate.outputs.project_dir }}/dist
 
   deploy:
     environment:
